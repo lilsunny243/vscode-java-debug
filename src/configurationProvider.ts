@@ -779,13 +779,12 @@ async function updateDebugSettings(event?: vscode.ConfigurationChangeEvent) {
                 skipConstructors: debugSettingsRoot.settings.stepping.skipConstructors,
             };
             const exceptionFilters = {
+                exceptionTypes: debugSettingsRoot.settings.exceptionBreakpoint.exceptionTypes,
+                allowClasses: debugSettingsRoot.settings.exceptionBreakpoint.allowClasses,
                 skipClasses: await substituteFilterVariables(debugSettingsRoot.settings.exceptionBreakpoint.skipClasses),
             };
 
-            let asyncJDWP: string = debugSettingsRoot.settings.jdwp.async;
-            if (asyncJDWP === "auto" && vscode.env?.appName === "Visual Studio Code - Insiders") {
-                asyncJDWP = "on";
-            }
+            const asyncJDWP: string = debugSettingsRoot.settings.jdwp.async;
             const settings = await commands.executeJavaLanguageServerCommand(commands.JAVA_UPDATE_DEBUG_SETTINGS, JSON.stringify(
                 {
                     ...debugSettingsRoot.settings,
@@ -793,7 +792,10 @@ async function updateDebugSettings(event?: vscode.ConfigurationChangeEvent) {
                     javaHome,
                     stepFilters,
                     exceptionFilters,
-                    exceptionFiltersUpdated: event && event.affectsConfiguration("java.debug.settings.exceptionBreakpoint.skipClasses"),
+                    exceptionFiltersUpdated: event &&
+                        (event.affectsConfiguration("java.debug.settings.exceptionBreakpoint.skipClasses")
+                        || event.affectsConfiguration("java.debug.settings.exceptionBreakpoint.allowClasses")
+                        || event.affectsConfiguration("java.debug.settings.exceptionBreakpoint.exceptionTypes")),
                     limitOfVariablesPerJdwpRequest: Math.max(debugSettingsRoot.settings.jdwp.limitOfVariablesPerJdwpRequest, 1),
                     jdwpRequestTimeout: Math.max(debugSettingsRoot.settings.jdwp.requestTimeout, 100),
                     asyncJDWP,

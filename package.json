@@ -2,7 +2,7 @@
   "name": "vscode-java-debug",
   "displayName": "Debugger for Java",
   "description": "A lightweight Java debugger for Visual Studio Code",
-  "version": "0.49.0",
+  "version": "0.50.0",
   "publisher": "vscjava",
   "preview": true,
   "aiKey": "67d4461e-ccba-418e-8082-1bd0acfe8516",
@@ -52,7 +52,7 @@
       }
     ],
     "javaExtensions": [
-      "./server/com.microsoft.java.debug.plugin-0.44.0.jar"
+      "./server/com.microsoft.java.debug.plugin-0.45.0.jar"
     ],
     "commands": [
       {
@@ -138,6 +138,14 @@
       {
         "command": "java.debug.variables.notShowToString",
         "title": "Disable 'toString()' Object View"
+      },
+      {
+        "command": "java.debug.variables.autoExpandLazyVariables",
+        "title": "Auto Expand Lazy Variables"
+      },
+      {
+        "command": "java.debug.variables.manualExpandLazyVariables",
+        "title": "Manual Expand Lazy Variables"
       }
     ],
     "menus": {
@@ -295,6 +303,14 @@
         {
           "command": "java.debug.variables.notShowToString",
           "when": "false"
+        },
+        {
+          "command": "java.debug.variables.autoExpandLazyVariables",
+          "when": "false"
+        },
+        {
+          "command": "java.debug.variables.manualExpandLazyVariables",
+          "when": "false"
         }
       ],
       "debug/variables/context": [
@@ -339,14 +355,14 @@
           "group": "1_view@4"
         },
         {
-          "command": "java.debug.variables.showToString",
-          "when": "debugType == 'java' && javadebug:showToString == 'off'",
-          "group": "1_view@5"
+          "command": "java.debug.variables.autoExpandLazyVariables",
+          "when": "debugType == 'java' && javadebug:expandLazyVariable == 'off'",
+          "group": "1_view@6"
         },
         {
-          "command": "java.debug.variables.notShowToString",
-          "when": "debugType == 'java' && javadebug:showToString == 'on'",
-          "group": "1_view@5"
+          "command": "java.debug.variables.manualExpandLazyVariables",
+          "when": "debugType == 'java' && javadebug:expandLazyVariable == 'on'",
+          "group": "1_view@6"
         }
       ]
     },
@@ -845,6 +861,22 @@
           "description": "%java.debugger.configuration.console%",
           "default": "integratedTerminal"
         },
+        "java.debug.settings.exceptionBreakpoint.exceptionTypes": {
+          "type": "array",
+          "description": "%java.debugger.configuration.exceptionBreakpoint.exceptionTypes%",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "java.debug.settings.exceptionBreakpoint.allowClasses": {
+          "type": "array",
+          "description": "%java.debugger.configuration.exceptionBreakpoint.allowClasses%",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
         "java.debug.settings.exceptionBreakpoint.skipClasses": {
           "type": "array",
           "description": "%java.debugger.configuration.exceptionBreakpoint.skipClasses%",
@@ -954,9 +986,9 @@
   },
   "devDependencies": {
     "@types/glob": "^7.2.0",
-    "@types/lodash": "^4.14.191",
+    "@types/lodash": "^4.14.192",
     "@types/mocha": "^10.0.1",
-    "@types/node": "^14.18.37",
+    "@types/node": "^14.18.41",
     "@types/uuid": "^8.3.4",
     "@types/vscode": "1.75.0",
     "@vscode/test-electron": "^2.3.0",
@@ -964,7 +996,7 @@
     "ts-loader": "^9.4.2",
     "tslint": "^6.1.3",
     "typescript": "^4.9.5",
-    "webpack": "^5.75.0",
+    "webpack": "^5.76.3",
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
